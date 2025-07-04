@@ -1,35 +1,43 @@
 const jwt = require("jsonwebtoken");
 const express = require("express");
-const project = require("../models/project");
+const Project = require("../models/project"); // ✅ capitalized model name
 const auth = require("../middleware/authMiddleware");
 const router = express.Router();
+
 router.use(auth);
 
+// GET all projects
 router.get("/", async (req, res) => {
-  const projects = await project.find({ user: req.user.userId });
+  const projects = await Project.find({ user: req.user.userId });
   res.json(projects);
 });
 
+// CREATE new project
 router.post("/", async (req, res) => {
-  const project = await project.save({ ...req.body, user: req.user.userId });
-  await project.save();
-  res.json(project);
+  try {
+    const project = new Project({ ...req.body, user: req.user.userId });
+    await project.save();
+    console.log(project, "Projects--------");
+    res.status(201).json(project);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Project creation failed" });
+  }
 });
 
+// UPDATE project
 router.put("/:id", async (req, res) => {
-  const update = await project.findOneAndUpdate(
-    {
-      _id: req.params.id,
-      user: req.user.userId,
-    },
+  const update = await Project.findOneAndUpdate(
+    { _id: req.params.id, user: req.user.userId },
     req.body,
     { new: true }
   );
   res.json(update);
 });
 
+// DELETE project
 router.delete("/:id", async (req, res) => {
-  await project.deleteOne({ _id: req.params.id, user: req.user.userId });
+  await Project.deleteOne({ _id: req.params.id, user: req.user.userId });
   res.json({ message: "Deleted" });
 });
 
