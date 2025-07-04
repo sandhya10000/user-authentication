@@ -45,8 +45,8 @@ This is the backend for a basic Project Management tool built with Node.js, Expr
 3. Create a `.env` file based on the sample below:
 
 ```env
-MONGO_URI=mongodb://localhost:27017/project-mgmt
-JWT_SECRET=your_jwt_secret
+MONGO_URL =mongodb://localhost:27017/userdb
+JWT_SECRET="sandhya@123"
 ```
 
 4. Install dependencies:
@@ -113,7 +113,3 @@ DELETE /api/tasks/:id
 * bcrypt
 
 ---
-
-## License
-
-This project is open-source and free to use.
